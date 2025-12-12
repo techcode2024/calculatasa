@@ -122,7 +122,7 @@ function App() {
 
       <Calculator usdRate={currentData.usd} eurRate={currentData.eur} usdtRate={currentData.usdt} />
 
-      <div style={{ marginTop: '0.5rem' }}>
+      <div style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
         <SimpleCalculator />
       </div>
 

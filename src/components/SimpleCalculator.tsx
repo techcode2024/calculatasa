@@ -40,7 +40,8 @@ export const SimpleCalculator: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '0.5rem'
+        padding: '0.5rem',
+        height: '40px'
     };
 
     const accentBtnStyle = {
@@ -51,7 +52,7 @@ export const SimpleCalculator: React.FC = () => {
     };
 
     return (
-        <div className="card animate-fade-in" style={{ padding: '0.75rem', height: '100%' }}>
+        <div className="card animate-fade-in" style={{ padding: '0.75rem' }}>
             <h2 className="title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Calculadora Rápida</h2>
 
             <div style={{
@@ -69,7 +70,7 @@ export const SimpleCalculator: React.FC = () => {
                 <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{display}</div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.4rem', height: '160px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.4rem' }}>
                 <button onClick={() => handlePress('C')} style={{ ...btnStyle, color: '#ef4444' }}>C</button>
                 <button onClick={() => handlePress('/')} style={{ ...btnStyle, color: 'var(--accent-secondary)' }}>/</button>
                 <button onClick={() => handlePress('*')} style={{ ...btnStyle, color: 'var(--accent-secondary)' }}>×</button>
