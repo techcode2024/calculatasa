@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { DollarSign, Euro, Calendar, RefreshCw, Share2, Coins } from 'lucide-react';
+import { DollarSign, Euro, Calendar, RefreshCw, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { RateCard } from './components/RateCard';
 import { Calculator } from './components/Calculator';
