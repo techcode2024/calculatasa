@@ -3,7 +3,7 @@ import { DollarSign, Euro, Calendar, RefreshCw, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { RateCard } from './components/RateCard';
 import { Calculator } from './components/Calculator';
-import { HistoryChart } from './components/HistoryChart';
+import { SimpleCalculator } from './components/SimpleCalculator';
 import { fetchHistory, type RateData } from './services/api';
 
 function App() {
@@ -17,7 +17,6 @@ function App() {
       const data = await fetchHistory();
       if (data.length > 0) {
         setHistoryData(data);
-        // Set selected date to the last available date in data
         const lastDate = data[data.length - 1].fullDate;
         setSelectedDate(format(lastDate, 'yyyy-MM-dd'));
       }
@@ -28,19 +27,13 @@ function App() {
 
   const currentData = useMemo(() => {
     if (historyData.length === 0) return { usd: 0, eur: 0, usdt: 0 };
-
-    // Find the latest rate that is <= selectedDate
     const found = [...historyData].reverse().find(d => d.isoDate <= selectedDate);
-
     return found || historyData[0];
   }, [selectedDate, historyData]);
 
   const prevData = useMemo(() => {
     if (historyData.length === 0) return { usd: 0, eur: 0, usdt: 0 };
-
-    // Find index of currentData in history
     const currentIdx = historyData.findIndex(d => d.isoDate === (currentData as RateData).isoDate);
-
     if (currentIdx > 0) return historyData[currentIdx - 1];
     return historyData[0];
   }, [currentData, historyData]);
@@ -62,7 +55,7 @@ function App() {
 
   return (
     <div className="container" style={{ padding: '0.5rem', paddingBottom: '1rem' }}>
-      <header className="flex-between" style={{ marginBottom: '1rem' }}>
+      <header className="flex-between" style={{ marginBottom: '0.5rem' }}>
         <div>
           <h1 className="title" style={{ margin: 0, fontSize: '1.5rem' }}>Calculatasa</h1>
           <p className="subtitle" style={{ fontSize: '0.8rem' }}>Tasa del día</p>
@@ -106,7 +99,7 @@ function App() {
         </div>
       </header>
 
-      <div className="grid-2" style={{ marginBottom: '0.75rem', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+      <div className="grid-2" style={{ marginBottom: '0.5rem', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
         <RateCard
           currency="BCV"
           rate={currentData.usd}
@@ -129,8 +122,8 @@ function App() {
 
       <Calculator usdRate={currentData.usd} eurRate={currentData.eur} usdtRate={currentData.usdt} />
 
-      <div style={{ marginTop: '0.75rem' }}>
-        <HistoryChart data={historyData} />
+      <div style={{ marginTop: '0.5rem' }}>
+        <SimpleCalculator />
       </div>
 
       <footer style={{ textAlign: 'center', marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.7rem' }}>
