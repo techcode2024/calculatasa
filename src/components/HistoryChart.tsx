@@ -6,12 +6,20 @@ interface HistoryChartProps {
 }
 
 export const HistoryChart: React.FC<HistoryChartProps> = ({ data }) => {
+    if (!data || data.length === 0) {
+        return (
+            <div className="card animate-fade-in" style={{ height: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p className="subtitle">Cargando histórico...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="card animate-fade-in" style={{ animationDelay: '0.2s', height: '350px' }}>
             <h2 className="title" style={{ fontSize: '1.25rem' }}>Histórico</h2>
             <div style={{ width: '100%', height: '250px' }}>
-                <ResponsiveContainer>
-                    <AreaChart data={data}>
+                <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorUsd" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
