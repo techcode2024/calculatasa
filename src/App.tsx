@@ -127,7 +127,7 @@ function App() {
       </div>
 
       <footer style={{ textAlign: 'center', marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.7rem' }}>
-        <p>© 2025 Calculatasa PWA.</p>
+        <p>© 2025 Calculatasa.</p>
       </footer>
     </div>
   );
