@@ -15,9 +15,9 @@ export const HistoryChart: React.FC<HistoryChartProps> = ({ data }) => {
     }
 
     return (
-        <div className="card animate-fade-in" style={{ animationDelay: '0.2s', height: '350px' }}>
-            <h2 className="title" style={{ fontSize: '1.25rem' }}>Histórico</h2>
-            <div style={{ width: '100%', height: '250px' }}>
+        <div className="card animate-fade-in" style={{ animationDelay: '0.2s', height: '220px', padding: '0.75rem' }}>
+            <h2 className="title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Histórico</h2>
+            <div style={{ width: '100%', height: '160px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <defs>

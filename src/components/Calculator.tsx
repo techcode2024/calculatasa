@@ -31,17 +31,17 @@ export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate, usdtRa
     }, [amount, currency, mode, usdRate, eurRate, usdtRate]);
 
     return (
-        <div className="card animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <h2 className="title" style={{ fontSize: '1.25rem' }}>Calculadora</h2>
+        <div className="card animate-fade-in" style={{ animationDelay: '0.1s', padding: '0.75rem' }}>
+            <h2 className="title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Calculadora</h2>
 
-            <div className="input-group">
-                <div className="flex-between" style={{ marginBottom: '0.5rem' }}>
-                    <label className="subtitle">Monto</label>
+            <div className="input-group" style={{ marginBottom: '0.5rem' }}>
+                <div className="flex-between" style={{ marginBottom: '0.25rem' }}>
+                    <label className="subtitle" style={{ fontSize: '0.8rem' }}>Monto</label>
                     <button
                         onClick={() => setMode(prev => prev === 'toBs' ? 'fromBs' : 'toBs')}
-                        style={{ background: 'none', border: 'none', color: 'var(--accent-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                        style={{ background: 'none', border: 'none', color: 'var(--accent-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}
                     >
-                        <ArrowRightLeft size={16} />
+                        <ArrowRightLeft size={14} />
                         {mode === 'toBs' ? `${currency} → Bs` : `Bs → ${currency}`}
                     </button>
                 </div>
@@ -52,24 +52,26 @@ export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate, usdtRa
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder="0.00"
+                        style={{ padding: '0.5rem', fontSize: '1rem' }}
                     />
                     <select
                         className="select"
                         value={currency}
                         onChange={(e) => setCurrency(e.target.value as 'USD' | 'EUR' | 'USDT')}
+                        style={{ padding: '0.5rem', fontSize: '1rem' }}
                     >
-                        <option value="USD">USD (BCV)</option>
+                        <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="USDT">USDT</option>
                     </select>
                 </div>
             </div>
 
-            <div style={{ background: 'var(--bg-primary)', padding: '1rem', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <div className="subtitle">Resultado</div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--accent-primary)' }}>
+            <div style={{ background: 'var(--bg-primary)', padding: '0.5rem', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                <div className="subtitle" style={{ fontSize: '0.7rem', marginBottom: '0.25rem' }}>Resultado</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--accent-primary)' }}>
                     {result.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    <span style={{ fontSize: '1rem', marginLeft: '0.25rem', color: 'var(--text-secondary)' }}>
+                    <span style={{ fontSize: '0.8rem', marginLeft: '0.25rem', color: 'var(--text-secondary)' }}>
                         {mode === 'toBs' ? 'Bs' : currency}
                     </span>
                 </div>

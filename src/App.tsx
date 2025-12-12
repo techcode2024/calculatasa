@@ -61,11 +61,11 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <header className="flex-between" style={{ marginBottom: '2rem' }}>
+    <div className="container" style={{ padding: '0.5rem', paddingBottom: '1rem' }}>
+      <header className="flex-between" style={{ marginBottom: '1rem' }}>
         <div>
-          <h1 className="title" style={{ margin: 0, fontSize: '2rem' }}>Calculatasa</h1>
-          <p className="subtitle">Tasa del día y conversiones</p>
+          <h1 className="title" style={{ margin: 0, fontSize: '1.5rem' }}>Calculatasa</h1>
+          <p className="subtitle" style={{ fontSize: '0.8rem' }}>Tasa del día</p>
         </div>
         <div className="flex-center" style={{ gap: '0.5rem' }}>
           <button
@@ -85,54 +85,56 @@ function App() {
               background: 'var(--bg-card)',
               border: '1px solid var(--border-color)',
               borderRadius: 'var(--radius-md)',
-              padding: '0.5rem',
+              padding: '0.4rem',
               cursor: 'pointer',
               color: 'var(--accent-secondary)'
             }}
             aria-label="Compartir"
           >
-            <Share2 size={20} />
+            <Share2 size={18} />
           </button>
 
-          <div className="flex-center" style={{ background: 'var(--bg-card)', padding: '0.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-            <Calendar size={20} style={{ marginRight: '0.5rem', color: 'var(--accent-primary)' }} />
+          <div className="flex-center" style={{ background: 'var(--bg-card)', padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <Calendar size={18} style={{ marginRight: '0.25rem', color: 'var(--accent-primary)' }} />
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', fontFamily: 'inherit', fontSize: '0.9rem', outline: 'none', colorScheme: 'dark' }}
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', fontFamily: 'inherit', fontSize: '0.8rem', outline: 'none', colorScheme: 'dark', width: '85px' }}
             />
           </div>
         </div>
       </header>
 
-      <div className="grid-2" style={{ marginBottom: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+      <div className="grid-2" style={{ marginBottom: '0.75rem', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
         <RateCard
-          currency="Dólar BCV"
+          currency="BCV"
           rate={currentData.usd}
           trend={getTrend(currentData.usd, prevData.usd)}
-          icon={<DollarSign size={24} color="#10b981" />}
+          icon={<DollarSign size={18} color="#10b981" />}
         />
         <RateCard
           currency="USDT"
           rate={currentData.usdt}
           trend={getTrend(currentData.usdt, prevData.usdt)}
-          icon={<Coins size={24} color="#f59e0b" />}
+          icon={<DollarSign size={18} color="#fbbf24" />}
         />
         <RateCard
-          currency="Euro"
+          currency="EUR"
           rate={currentData.eur}
           trend={getTrend(currentData.eur, prevData.eur)}
-          icon={<Euro size={24} color="#3b82f6" />}
+          icon={<Euro size={18} color="#3b82f6" />}
         />
       </div>
 
       <Calculator usdRate={currentData.usd} eurRate={currentData.eur} usdtRate={currentData.usdt} />
 
-      <HistoryChart data={historyData} />
+      <div style={{ marginTop: '0.75rem' }}>
+        <HistoryChart data={historyData} />
+      </div>
 
-      <footer style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-        <p>© 2025 Calculatasa PWA. Datos referenciales.</p>
+      <footer style={{ textAlign: 'center', marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.7rem' }}>
+        <p>© 2025 Calculatasa PWA.</p>
       </footer>
     </div>
   );
