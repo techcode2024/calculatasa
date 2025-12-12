@@ -2,7 +2,7 @@ import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface HistoryChartProps {
-    data: { date: string; usd: number; eur: number }[];
+    data: { date: string; usd: number; eur: number; usdt: number }[];
 }
 
 export const HistoryChart: React.FC<HistoryChartProps> = ({ data }) => {
@@ -21,6 +21,10 @@ export const HistoryChart: React.FC<HistoryChartProps> = ({ data }) => {
                                 <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
                                 <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                             </linearGradient>
+                            <linearGradient id="colorUsdt" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                            </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
                         <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
@@ -29,7 +33,8 @@ export const HistoryChart: React.FC<HistoryChartProps> = ({ data }) => {
                             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
                             itemStyle={{ color: '#f8fafc' }}
                         />
-                        <Area type="monotone" dataKey="usd" stroke="#10b981" fillOpacity={1} fill="url(#colorUsd)" name="Dólar" />
+                        <Area type="monotone" dataKey="usd" stroke="#10b981" fillOpacity={1} fill="url(#colorUsd)" name="Dólar BCV" />
+                        <Area type="monotone" dataKey="usdt" stroke="#f59e0b" fillOpacity={1} fill="url(#colorUsdt)" name="USDT" />
                         <Area type="monotone" dataKey="eur" stroke="#3b82f6" fillOpacity={1} fill="url(#colorEur)" name="Euro" />
                     </AreaChart>
                 </ResponsiveContainer>

@@ -6,6 +6,7 @@ export interface RateData {
     fullDate: Date;
     usd: number;
     eur: number;
+    usdt: number;
 }
 
 const PROXY_URL = 'https://api.allorigins.win/get?url=';
@@ -14,16 +15,23 @@ export const fetchHistory = async (): Promise<RateData[]> => {
     let historyRates: RateData[] = [];
     let currentUsd = 0;
     let currentEur = 0;
+    let currentUsdt = 0;
 
-    // 1. Fetch Current Official Rate (Fast & Reliable)
+    // 1. Fetch Current Rates (Official & Parallel)
     try {
-        const response = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+        // Fetch all rates from dolarapi
+        const response = await fetch('https://ve.dolarapi.com/v1/dolares');
         if (response.ok) {
             const data = await response.json();
-            currentUsd = data.promedio;
+            // data is an array: [{fuente: 'oficial', promedio: ...}, {fuente: 'paralelo', promedio: ...}]
+            const oficial = data.find((d: any) => d.fuente === 'oficial');
+            const paralelo = data.find((d: any) => d.fuente === 'paralelo');
+
+            if (oficial) currentUsd = oficial.promedio;
+            if (paralelo) currentUsdt = paralelo.promedio;
         }
     } catch (e) {
-        console.error('Error fetching current USD:', e);
+        console.error('Error fetching current rates:', e);
     }
 
     // 2. Fetch EUR/USD Ratio for Euro calculation
@@ -66,6 +74,10 @@ export const fetchHistory = async (): Promise<RateData[]> => {
                 // Sort by date ascending
                 rates.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+                // Calculate a rough ratio for historical USDT based on current gap
+                // This is an approximation because we don't have historical USDT data easily
+                const usdtRatio = currentUsd > 0 ? currentUsdt / currentUsd : 1.5;
+
                 historyRates = rates.map((item: any) => {
                     const dateParts = item.date.split('-');
                     const publicationDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
@@ -77,7 +89,9 @@ export const fetchHistory = async (): Promise<RateData[]> => {
                         isoDate: format(validDate, 'yyyy-MM-dd'),
                         fullDate: validDate,
                         usd: item.dollar,
-                        eur: parseFloat((item.dollar * eurToUsdRatio).toFixed(4))
+                        eur: parseFloat((item.dollar * eurToUsdRatio).toFixed(4)),
+                        // Estimate historical USDT using current ratio (better than nothing for chart)
+                        usdt: parseFloat((item.dollar * usdtRatio).toFixed(2))
                     };
                 });
             }
@@ -95,7 +109,8 @@ export const fetchHistory = async (): Promise<RateData[]> => {
             isoDate: format(now, 'yyyy-MM-dd'),
             fullDate: now,
             usd: currentUsd,
-            eur: currentEur
+            eur: currentEur,
+            usdt: currentUsdt
         });
     }
 
@@ -113,12 +128,14 @@ export const fetchHistory = async (): Promise<RateData[]> => {
                 isoDate: format(new Date(), 'yyyy-MM-dd'),
                 fullDate: new Date(),
                 usd: currentUsd,
-                eur: currentEur
+                eur: currentEur,
+                usdt: currentUsdt
             });
         } else {
             // If it IS today, update it with the most precise current rate
             last.usd = currentUsd;
             last.eur = currentEur;
+            last.usdt = currentUsdt;
         }
     }
 

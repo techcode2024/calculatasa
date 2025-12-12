@@ -4,11 +4,12 @@ import { ArrowRightLeft } from 'lucide-react';
 interface CalculatorProps {
     usdRate: number;
     eurRate: number;
+    usdtRate: number;
 }
 
-export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate }) => {
+export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate, usdtRate }) => {
     const [amount, setAmount] = useState<string>('');
-    const [currency, setCurrency] = useState<'USD' | 'EUR'>('USD');
+    const [currency, setCurrency] = useState<'USD' | 'EUR' | 'USDT'>('USD');
     const [mode, setMode] = useState<'toBs' | 'fromBs'>('toBs'); // toBs: USD -> Bs, fromBs: Bs -> USD
     const [result, setResult] = useState<number>(0);
 
@@ -18,13 +19,16 @@ export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate }) => {
             setResult(0);
             return;
         }
-        const rate = currency === 'USD' ? usdRate : eurRate;
+        let rate = usdRate;
+        if (currency === 'EUR') rate = eurRate;
+        if (currency === 'USDT') rate = usdtRate;
+
         if (mode === 'toBs') {
             setResult(val * rate);
         } else {
             setResult(val / rate);
         }
-    }, [amount, currency, mode, usdRate, eurRate]);
+    }, [amount, currency, mode, usdRate, eurRate, usdtRate]);
 
     return (
         <div className="card animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -52,10 +56,11 @@ export const Calculator: React.FC<CalculatorProps> = ({ usdRate, eurRate }) => {
                     <select
                         className="select"
                         value={currency}
-                        onChange={(e) => setCurrency(e.target.value as 'USD' | 'EUR')}
+                        onChange={(e) => setCurrency(e.target.value as 'USD' | 'EUR' | 'USDT')}
                     >
-                        <option value="USD">USD</option>
+                        <option value="USD">USD (BCV)</option>
                         <option value="EUR">EUR</option>
+                        <option value="USDT">USDT</option>
                     </select>
                 </div>
             </div>

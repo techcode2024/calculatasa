@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { DollarSign, Euro, Calendar, RefreshCw, Share2 } from 'lucide-react';
+import { DollarSign, Euro, Calendar, RefreshCw, Share2, Coins } from 'lucide-react';
 import { format } from 'date-fns';
 import { RateCard } from './components/RateCard';
 import { Calculator } from './components/Calculator';
@@ -27,25 +27,19 @@ function App() {
   }, []);
 
   const currentData = useMemo(() => {
-    if (historyData.length === 0) return { usd: 0, eur: 0 };
+    if (historyData.length === 0) return { usd: 0, eur: 0, usdt: 0 };
 
     // Find the latest rate that is <= selectedDate
-    // historyData is sorted ascending by date
-    // We reverse to find the latest one first
     const found = [...historyData].reverse().find(d => d.isoDate <= selectedDate);
 
-    // If selected date is older than all history, return oldest? Or just return found (which might be undefined)
-    // If undefined, it means selectedDate < oldest history. 
-    // In that case, we probably should show the oldest available or 0.
-    // Let's show oldest available to be safe.
     return found || historyData[0];
   }, [selectedDate, historyData]);
 
   const prevData = useMemo(() => {
-    if (historyData.length === 0) return { usd: 0, eur: 0 };
+    if (historyData.length === 0) return { usd: 0, eur: 0, usdt: 0 };
 
     // Find index of currentData in history
-    const currentIdx = historyData.findIndex(d => d.isoDate === (currentData as RateData).isoDate); // Use isoDate for reliable match
+    const currentIdx = historyData.findIndex(d => d.isoDate === (currentData as RateData).isoDate);
 
     if (currentIdx > 0) return historyData[currentIdx - 1];
     return historyData[0];
@@ -61,7 +55,7 @@ function App() {
     return (
       <div className="container flex-center" style={{ height: '100vh', flexDirection: 'column' }}>
         <RefreshCw className="animate-spin" size={48} color="var(--accent-primary)" />
-        <p className="subtitle" style={{ marginTop: '1rem' }}>Cargando tasas del BCV...</p>
+        <p className="subtitle" style={{ marginTop: '1rem' }}>Cargando tasas...</p>
       </div>
     );
   }
@@ -79,7 +73,7 @@ function App() {
               if (navigator.share) {
                 navigator.share({
                   title: 'Calculatasa',
-                  text: `Tasa del día: ${currentData.usd} Bs/$`,
+                  text: `Tasa del día:\nUSD BCV: ${currentData.usd} Bs\nUSDT: ${currentData.usdt} Bs`,
                   url: window.location.href
                 }).catch(console.error);
               } else {
@@ -112,12 +106,18 @@ function App() {
         </div>
       </header>
 
-      <div className="grid-2" style={{ marginBottom: '1rem' }}>
+      <div className="grid-2" style={{ marginBottom: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
         <RateCard
-          currency="Dólar"
+          currency="Dólar BCV"
           rate={currentData.usd}
           trend={getTrend(currentData.usd, prevData.usd)}
           icon={<DollarSign size={24} color="#10b981" />}
+        />
+        <RateCard
+          currency="USDT"
+          rate={currentData.usdt}
+          trend={getTrend(currentData.usdt, prevData.usdt)}
+          icon={<Coins size={24} color="#f59e0b" />}
         />
         <RateCard
           currency="Euro"
@@ -127,12 +127,12 @@ function App() {
         />
       </div>
 
-      <Calculator usdRate={currentData.usd} eurRate={currentData.eur} />
+      <Calculator usdRate={currentData.usd} eurRate={currentData.eur} usdtRate={currentData.usdt} />
 
       <HistoryChart data={historyData} />
 
       <footer style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-        <p>© 2025 Calculatasa PWA. Datos referenciales del BCV.</p>
+        <p>© 2025 Calculatasa PWA. Datos referenciales.</p>
       </footer>
     </div>
   );
